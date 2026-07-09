@@ -259,7 +259,7 @@
 
 ## Module 7: Polish — Styling, Responsive, Deploy
 
-**Status:** [ ]
+**Status:** [~]
 **Prioritas:** Sedang
 
 ### Fungsi & code yang direncanakan
@@ -275,12 +275,22 @@
 - Semua module sebelumnya selesai
 
 ### Definition of Done
-- Website bisa diakses via URL publik
-- Tidak ada broken layout di ukuran layar umum (375px, 768px, 1440px)
-- Login admin tetap berfungsi di production
+- [ ] Website bisa diakses via URL publik — **menunggu eksekusi kamu** (buat akun Turso & Vercel, lihat README.md bagian "Deploy ke production")
+- [~] Tidak ada broken layout di ukuran layar umum (375px, 768px, 1440px) — audit code-level selesai + beberapa bug diperbaiki, tapi belum ada konfirmasi visual asli di browser (extension claude-in-chrome tidak terhubung sepanjang project ini)
+- [ ] Login admin tetap berfungsi di production — belum bisa diverifikasi, production belum di-deploy
 
 ### Catatan implementasi
--
+- **Bug ditemukan & diperbaiki:** `SiteHeader` (navbar publik, ditambahkan ke root layout di Module 3) ternyata ikut tampil di `/login` dan semua `/admin/*`, padahal halaman-halaman itu didesain Module 2 full-viewport (`min-h-screen`) tanpa asumsi ada header di atasnya — hasilnya tinggi halaman jadi header+100vh (extra scroll, login card tidak center sempurna). Diperbaiki dengan restrukturisasi pakai **Next.js route group**: halaman publik (`/`, `/about`, `/skills`, `/portfolio`, `/portfolio/[id]`) dipindah ke `app/(public)/` dengan layout sendiri yang render `SiteHeader`; `/login` dan `/admin/*` tetap di luar grup itu jadi otomatis tidak dapat header. URL tidak berubah sama sekali (route group tidak masuk path)
+- **Inkonsistensi kecil diperbaiki:** tombol CTA biru mayoritas pakai `rounded-full`, tapi tombol submit login & tombol Contact di mobile nav masih `rounded-md` — disamakan
+- **Bug responsive diperbaiki:** baris form "Contact Link" (2 input + tombol Hapus) dan baris "Kategori + Hapus" di form Skill (Module 5) berpotensi overflow di layar 375px karena dipaksa 1 baris tanpa wrap — diperbaiki jadi stack vertikal/full-width di breakpoint mobile
+- Breakpoint navbar (`SiteHeader`/`MobileNav`) digeser dari `sm:` (640px) ke `md:` (768px) supaya lebih longgar di lebar 640-767px, tanpa mengubah perilaku di 3 breakpoint yang diuji (375/768/1440)
+- **Production DB:** dikonfirmasi ke user bahwa SQLite lokal (`better-sqlite3`, native binding, file lokal) **tidak bisa dipakai di Vercel** (filesystem serverless read-only/ephemeral). Pilihan production: **Turso** (SQLite-compatible via libSQL, disetujui user). `lib/prisma.ts` diubah jadi dual-adapter: `DATABASE_URL` diawali `file:` → pakai `@prisma/adapter-better-sqlite3` (dev lokal), selain itu → pakai `@prisma/adapter-libsql` + `TURSO_AUTH_TOKEN` (production)
+- Sempat coba pakai top-level `await` di `lib/prisma.ts` buat dynamic import adapter sesuai environment — **gagal**, karena `tsx` (dipakai `prisma/seed.ts`) transpile ke CJS yang tidak support top-level await. Diperbaiki jadi synchronous: kedua adapter di-`import` statis di atas, dipilih lewat if/else biasa berdasarkan prefix `DATABASE_URL`
+- `package.json` ditambah script `postinstall: "prisma generate"` — perlu karena `lib/generated/prisma` di-gitignore (bukan di-commit), jadi Vercel wajib generate ulang Prisma Client saat build
+- `README.md` ditulis ulang (sebelumnya masih boilerplate `create-next-app`) — isinya setup lokal + panduan step-by-step deploy (buat DB Turso, migrate+seed ke Turso, push ke GitHub, set env var di Vercel)
+- **Keputusan pembagian kerja** (dikonfirmasi user): Claude siapkan semua kode/config/instruksi, tapi **tidak** membuat akun Turso/Vercel/GitHub atau melakukan `git push`/deploy aktual — itu tugas user sendiri, karena approval akun & kredensial eksternal ada di luar wewenang yang diizinkan
+- Git repo sebelumnya belum pernah di-commit sama sekali sejak Module 1 (semua kerjaan 6 module numpuk uncommitted). Sudah dibuat 1 commit awal mencakup seluruh project (git identity di-set lokal khusus repo ini pakai email user, bukan `--global`)
+- **Belum dikerjakan** (menunggu user, langkah lengkap ada di README.md): buat database Turso, `prisma migrate deploy` + `prisma db seed` ke Turso, ganti password admin default, push ke GitHub, buat project Vercel + set env var, deploy, verifikasi production
 
 ### Review checkpoint
 - [ ] Sudah direview
@@ -299,6 +309,7 @@
 - 9 Juli 2026 — Task plan awal dibuat, stack dikunci: Next.js + Prisma/SQLite + NextAuth (Credentials)
 - 9 Juli 2026 — Fokus dipersempit ke profil-portofolio saja (blog artikel jadi backlog). Referensi visual ditambahkan (dark mode, aksen biru, grid card portofolio, skill dengan icon tools) — dikembangkan jadi versi sendiri, bukan replikasi persis
 - 9 Juli 2026 — Module 1 selesai. Deviasi teknis kecil dari rencana awal (stack inti tidak berubah): (1) Prisma pakai versi 7 dengan driver adapter `@prisma/adapter-better-sqlite3` karena versi ini tidak lagi punya default query engine bawaan; (2) hashing password pakai `bcryptjs` (implementasi bcrypt pure-JS) bukan `bcrypt` native, supaya tidak butuh build tools tambahan di Windows — tetap penuhi requirement "password wajib di-hash" di CLAUDE.md
+- 9 Juli 2026 — Module 7 (in progress). Struktur `app/` direstrukturisasi pakai Next.js route group (`app/(public)/`) supaya `SiteHeader` cuma tampil di halaman publik, tidak di `/login`/`/admin/*` — perbaikan bug, URL tidak berubah. Database production dikonfirmasi ke user: SQLite lokal tidak jalan di Vercel, pindah ke **Turso** (disetujui user, lebih minim perubahan kode dibanding Postgres). Pembagian kerja disepakati: Claude siapkan kode/config/instruksi deploy, user yang eksekusi pembuatan akun (Turso/Vercel/GitHub) dan deploy aktual
 
 ---
 
