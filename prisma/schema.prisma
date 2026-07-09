@@ -1,0 +1,57 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Profile {
+  id           String   @id @default(cuid())
+  name         String
+  bio          String
+  photoUrl     String?
+  email        String
+  contactLinks Json? // e.g. [{ "label": "GitHub", "url": "https://github.com/..." }]
+  skills       Skill[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Skill {
+  id        String  @id @default(cuid())
+  name      String
+  iconSlug  String? // slug icon dari library (mis. Simple Icons)
+  iconUrl   String? // dipakai kalau upload icon custom
+  category  String?
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId String
+}
+
+model Portfolio {
+  id           String   @id @default(cuid())
+  title        String
+  description  String
+  category     String // "web" | "app" | "design"
+  thumbnailUrl String?
+  year         Int
+  role         String
+  techStack    Json // string[] tags, mis. ["Next.js", "Tailwind"]
+  externalUrl  String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
