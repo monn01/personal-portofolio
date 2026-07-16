@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { ProfileSection } from "@/components/ProfileSection";
 import { buildPageMetadata } from "@/lib/seo";
-import { getAchievements, getProfile } from "@/lib/queries";
+import { getProfile } from "@/lib/queries";
 
 export async function generateMetadata(): Promise<Metadata> {
   const profile = await getProfile();
@@ -14,10 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function AboutPage() {
-  const [profile, achievements] = await Promise.all([
-    getProfile(),
-    getAchievements(),
-  ]);
+  const profile = await getProfile();
 
   if (!profile) {
     return (
@@ -38,7 +35,6 @@ export default async function AboutPage() {
         galleryPhotos={profile.galleryPhotos}
         cvUrl={profile.cvUrl}
         taglines={profile.taglines}
-        achievements={achievements}
       />
     </main>
   );

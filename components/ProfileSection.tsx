@@ -1,4 +1,3 @@
-import { AchievementCard } from "@/components/AchievementCard";
 import { Button } from "@/components/ui/Button";
 import { PageIntro } from "@/components/ui/PageIntro";
 import { RipplePanel } from "@/components/ui/RipplePanel";
@@ -6,16 +5,6 @@ import { TiltPhotoCard } from "@/components/ui/TiltPhotoCard";
 import type { ContactLink } from "@/lib/queries";
 import { getSimpleIconMarkup } from "@/lib/simple-icon";
 import { getSocialFallbackMarkup, resolveSocialSlug } from "@/lib/social";
-
-type AchievementItem = {
-  id: string;
-  title: string;
-  description: string | null;
-  organizer: string;
-  year: number;
-  tier: string;
-  certificateUrl: string | null;
-};
 
 type ProfileSectionProps = {
   name: string;
@@ -26,7 +15,6 @@ type ProfileSectionProps = {
   galleryPhotos: string[];
   cvUrl?: string | null;
   taglines: string[];
-  achievements: AchievementItem[];
 };
 
 export function ProfileSection({
@@ -38,7 +26,6 @@ export function ProfileSection({
   galleryPhotos,
   cvUrl,
   taglines,
-  achievements,
 }: ProfileSectionProps) {
   const role = taglines[0] ?? null;
 
@@ -46,8 +33,9 @@ export function ProfileSection({
     <section className="relative mx-auto max-w-5xl px-6 py-20 sm:py-24">
       <div className="flex flex-col-reverse gap-10 md:flex-row md:items-center md:gap-14">
         <PageIntro className="flex-1 text-center md:text-left">
-          <p className="text-xs font-black tracking-widest text-accent uppercase">
-            About Me
+          <p className="text-sm font-black tracking-widest uppercase">
+            <span className="text-foreground-secondary">About</span>{" "}
+            <span className="text-accent">Me</span>
           </p>
           <h1 className="mt-1 text-4xl font-black tracking-tight text-foreground sm:text-5xl">
             {name}
@@ -137,28 +125,11 @@ export function ProfileSection({
         )}
       </div>
 
-      {achievements.length > 0 && (
-        <PageIntro className="mt-16">
-          <h2 className="text-xl font-black text-foreground">Achievements</h2>
-          <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {achievements.map((achievement) => (
-              <AchievementCard
-                key={achievement.id}
-                title={achievement.title}
-                description={achievement.description}
-                organizer={achievement.organizer}
-                year={achievement.year}
-                tier={achievement.tier}
-                certificateUrl={achievement.certificateUrl}
-              />
-            ))}
-          </div>
-        </PageIntro>
-      )}
-
       {galleryPhotos.length > 0 && (
         <PageIntro className="mt-16">
-          <h2 className="text-xl font-black text-foreground">Galeri Foto</h2>
+          <h2 className="text-center text-2xl font-black tracking-tight text-foreground sm:text-3xl">
+            Galeri <span className="text-accent">Foto</span>
+          </h2>
           <div className="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-3">
             {galleryPhotos.map((photo, index) => (
               <RipplePanel
