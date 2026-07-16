@@ -48,7 +48,7 @@ export function CertAwardPreviewCard({
 
         <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-2 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-3 pt-10">
           <p className="truncate text-sm font-black text-white">{title}</p>
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent-mint text-background shadow-lg transition-transform duration-300 group-hover:translate-x-0.5">
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/25 bg-white/10 text-white backdrop-blur-sm transition-transform duration-300 group-hover:translate-x-0.5 group-hover:bg-white/20">
             <svg
               viewBox="0 0 24 24"
               fill="none"
