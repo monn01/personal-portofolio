@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { AdminListRow } from "@/components/admin/AdminListRow";
 import { AwardIcon } from "@/components/admin/AdminNavIcons";
+import { CertificationFeaturedToggle } from "@/components/admin/CertificationFeaturedToggle";
 import { Button } from "@/components/ui/Button";
 import { formatDate } from "@/lib/format";
 import { getCertifications } from "@/lib/queries";
@@ -44,6 +45,18 @@ export default async function AdminCertificationsListPage() {
                 subtitle={`${certification.issuer} · ${formatDate(certification.issueDate)}`}
                 imageUrl={certification.imageUrl}
                 icon={<AwardIcon />}
+                extraAction={
+                  <CertificationFeaturedToggle
+                    id={certification.id}
+                    title={certification.title}
+                    issuer={certification.issuer}
+                    issueDate={certification.issueDate.toISOString()}
+                    credentialUrl={certification.credentialUrl}
+                    imageUrl={certification.imageUrl}
+                    tier={certification.tier}
+                    featuredOnHome={certification.featuredOnHome}
+                  />
+                }
                 deleteEndpoint={`/api/certification/${certification.id}`}
                 deleteConfirmMessage={`Hapus certification "${certification.title}"? Tindakan ini tidak bisa dibatalkan.`}
                 deleteErrorMessage="Gagal menghapus certification."

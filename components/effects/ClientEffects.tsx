@@ -1,6 +1,7 @@
 "use client";
 
 import { CustomCursor } from "./CustomCursor";
+import { MobileBackToHome } from "./MobileBackToHome";
 import { NetworkBackground } from "./NetworkBackground";
 import { Preloader } from "./Preloader";
 import { ScrollProgress } from "./ScrollProgress";
@@ -14,6 +15,7 @@ export function ClientEffects() {
       <CustomCursor />
       <ScrollProgress />
       <VisitTracker />
+      <MobileBackToHome />
     </>
   );
 }

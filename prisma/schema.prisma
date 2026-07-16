@@ -65,17 +65,18 @@ model Experience {
 }
 
 model Certification {
-  id            String   @id @default(cuid())
-  title         String
-  issuer        String
-  issueDate     DateTime
-  credentialUrl String?
-  imageUrl      String
-  tier          String   @default("local") // "local" | "international"
-  profile       Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  profileId     String
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id             String   @id @default(cuid())
+  title          String
+  issuer         String
+  issueDate      DateTime
+  credentialUrl  String?
+  imageUrl       String
+  tier           String   @default("local") // "local" | "international"
+  featuredOnHome Boolean  @default(true) // dipilih admin: tampil di preview Home atau tidak
+  profile        Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId      String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
 
 model Achievement {

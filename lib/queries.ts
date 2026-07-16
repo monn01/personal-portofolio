@@ -63,7 +63,7 @@ export const getExperienceById = cache(async (id: string) => {
 
 export const getCertifications = cache(async () => {
   return prisma.certification.findMany({
-    orderBy: [{ issueDate: "desc" }],
+    orderBy: [{ issueDate: "asc" }],
   });
 });
 

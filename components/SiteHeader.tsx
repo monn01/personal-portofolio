@@ -3,17 +3,6 @@ import { SitePillNav } from "@/components/SitePillNav";
 import { Button } from "@/components/ui/Button";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { getProfile } from "@/lib/queries";
-import { MobileNav } from "./MobileNav";
-
-const NAV_LINKS = [
-  { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
-  { href: "/skills", label: "Skills" },
-  { href: "/portfolio", label: "Projects" },
-  { href: "/experience", label: "Experience" },
-  { href: "/certifications", label: "Certifications" },
-  { href: "/blog", label: "Blog" },
-];
 
 function initials(name: string) {
   const parts = name.trim().split(/\s+/).filter(Boolean);
@@ -50,7 +39,6 @@ export async function SiteHeader() {
 
         <div className="flex items-center gap-2 lg:hidden">
           <ThemeToggle />
-          <MobileNav links={NAV_LINKS} />
         </div>
       </div>
     </header>

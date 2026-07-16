@@ -40,6 +40,7 @@ export default async function EditCertificationPage({
               credentialUrl: certification.credentialUrl,
               imageUrl: certification.imageUrl,
               tier: certification.tier,
+              featuredOnHome: certification.featuredOnHome,
             }}
           />
         </div>

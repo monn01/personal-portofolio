@@ -100,11 +100,13 @@ export default async function HomePage() {
     }));
 
   const certAwardItems = [
-    ...certifications.map((certification) => ({
-      type: "certification" as const,
-      date: certification.issueDate,
-      data: certification,
-    })),
+    ...certifications
+      .filter((certification) => certification.featuredOnHome)
+      .map((certification) => ({
+        type: "certification" as const,
+        date: certification.issueDate,
+        data: certification,
+      })),
     ...achievements.map((achievement) => ({
       type: "achievement" as const,
       date: new Date(achievement.year, 0, 1),

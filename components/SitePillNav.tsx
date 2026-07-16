@@ -3,53 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { ComponentType } from "react";
-import {
-  AwardIcon,
-  BriefcaseIcon,
-  DocumentIcon,
-  FolderIcon,
-  HomeIcon,
-  SkillsIcon,
-  UserIcon,
-} from "@/components/NavIcons";
-
-type AccentToken =
-  | "accent"
-  | "accent-secondary"
-  | "accent-tertiary"
-  | "accent-pink"
-  | "accent-mint";
-
-type NavItem = {
-  href: string;
-  label: string;
-  icon: ComponentType;
-  accent: AccentToken;
-};
-
-const NAV_ITEMS: NavItem[] = [
-  { href: "/", label: "Home", icon: HomeIcon, accent: "accent" },
-  { href: "/about", label: "About", icon: UserIcon, accent: "accent-pink" },
-  { href: "/skills", label: "Skills", icon: SkillsIcon, accent: "accent-mint" },
-  { href: "/portfolio", label: "Projects", icon: FolderIcon, accent: "accent-tertiary" },
-  { href: "/experience", label: "Experience", icon: BriefcaseIcon, accent: "accent-secondary" },
-  { href: "/certifications", label: "Certifications", icon: AwardIcon, accent: "accent" },
-  { href: "/blog", label: "Blog", icon: DocumentIcon, accent: "accent-pink" },
-];
-
-const ACCENT_BG: Record<AccentToken, string> = {
-  accent: "bg-accent",
-  "accent-secondary": "bg-accent-secondary",
-  "accent-tertiary": "bg-accent-tertiary",
-  "accent-pink": "bg-accent-pink",
-  "accent-mint": "bg-accent-mint",
-};
-
-function isActive(pathname: string, href: string) {
-  if (href === "/") return pathname === "/";
-  return pathname === href || pathname.startsWith(`${href}/`);
-}
+import { ACCENT_BG, isNavActive, NAV_ITEMS } from "@/lib/nav";
 
 export function SitePillNav() {
   const pathname = usePathname();
@@ -57,7 +11,7 @@ export function SitePillNav() {
   return (
     <nav className="flex items-center gap-1 rounded-full border border-border bg-surface/80 px-2 py-1.5 shadow-lg backdrop-blur-md">
       {NAV_ITEMS.map((item) => {
-        const active = isActive(pathname, item.href);
+        const active = isNavActive(pathname, item.href);
         const Icon = item.icon;
 
         return (

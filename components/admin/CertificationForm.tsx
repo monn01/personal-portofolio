@@ -17,6 +17,7 @@ type CertificationFormProps = {
     credentialUrl: string | null;
     imageUrl: string;
     tier: string;
+    featuredOnHome: boolean;
   };
 };
 
@@ -41,6 +42,9 @@ export function CertificationForm({
   );
   const [imageUrl, setImageUrl] = useState(initial?.imageUrl ?? "");
   const [tier, setTier] = useState(initial?.tier ?? TIERS[0]);
+  const [featuredOnHome, setFeaturedOnHome] = useState(
+    initial?.featuredOnHome ?? true,
+  );
   const [status, setStatus] = useState<"idle" | "saving" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -63,6 +67,7 @@ export function CertificationForm({
       credentialUrl: credentialUrl || null,
       imageUrl,
       tier,
+      featuredOnHome,
     };
 
     const url =
@@ -148,6 +153,16 @@ export function CertificationForm({
             className={inputClass}
           />
         </Field>
+
+        <label className="flex items-center gap-2 text-sm font-medium text-foreground-secondary">
+          <input
+            type="checkbox"
+            checked={featuredOnHome}
+            onChange={(e) => setFeaturedOnHome(e.target.checked)}
+            className="h-4 w-4 rounded border-border accent-accent"
+          />
+          Tampilkan di preview Home
+        </label>
       </FormSection>
 
       {errorMessage && (

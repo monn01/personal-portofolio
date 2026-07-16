@@ -264,6 +264,7 @@ export type CertificationInput = {
   credentialUrl: string | null;
   imageUrl: string;
   tier: string;
+  featuredOnHome: boolean;
 };
 
 export function parseCertificationInput(
@@ -280,6 +281,8 @@ export function parseCertificationInput(
       typeof raw.credentialUrl === "string" ? raw.credentialUrl : null,
     imageUrl: typeof raw.imageUrl === "string" ? raw.imageUrl : "",
     tier: typeof raw.tier === "string" ? raw.tier : TIERS[0],
+    featuredOnHome:
+      typeof raw.featuredOnHome === "boolean" ? raw.featuredOnHome : true,
   };
 }
 
@@ -309,6 +312,7 @@ function toCertificationData(input: CertificationInput) {
     credentialUrl: input.credentialUrl?.trim() || null,
     imageUrl: input.imageUrl.trim(),
     tier: input.tier,
+    featuredOnHome: input.featuredOnHome,
   };
 }
 
