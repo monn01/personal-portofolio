@@ -19,7 +19,7 @@ export function ScrollToTopButton() {
   return (
     <AnimatePresence>
       {isVisible && (
-        <MagneticButton strength={0.4} className="fixed right-6 bottom-24 z-40 lg:bottom-6">
+        <MagneticButton strength={0.4} className="fixed right-6 bottom-6 z-40">
           <motion.button
             type="button"
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { MobileNav } from "@/components/MobileNav";
 import { SitePillNav } from "@/components/SitePillNav";
 import { Button } from "@/components/ui/Button";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
@@ -39,6 +40,7 @@ export async function SiteHeader() {
 
         <div className="flex items-center gap-2 lg:hidden">
           <ThemeToggle />
+          <MobileNav />
         </div>
       </div>
     </header>
