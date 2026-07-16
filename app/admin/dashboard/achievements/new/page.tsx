@@ -9,11 +9,11 @@ export default function NewAchievementPage() {
           href="/admin/dashboard/achievements"
           className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground-secondary"
         >
-          ← Kembali ke Kelola Achievements
+          ← Kembali ke Kelola Awards
         </Link>
 
         <h1 className="mt-4 text-2xl font-black text-foreground">
-          Tambah Achievement
+          Tambah Award
         </h1>
 
         <div className="mt-8">

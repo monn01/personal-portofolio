@@ -43,7 +43,7 @@ export default async function AdminDashboardPage() {
     },
     {
       href: "/admin/dashboard/achievements",
-      title: "Kelola Achievements",
+      title: "Kelola Awards",
       description: "Tambah, edit, atau hapus pencapaian/penghargaan.",
       icon: <TrophyIcon />,
       count: counts.achievement,

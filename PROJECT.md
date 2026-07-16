@@ -135,7 +135,7 @@ Website pribadi berisi profil diri, daftar skill yang dikuasai, dan portofolio p
 - [x] Admin bisa login dan CRUD portofolio + edit profil tanpa sentuh kode
 - [x] Non-admin tidak bisa akses `/admin/*` sama sekali (redirect ke login)
 - [x] Tampilan responsive di mobile & desktop (audit code-level selesai, verifikasi visual browser masih pending)
-- [ ] Website bisa di-deploy dan diakses publik (kode & instruksi siap, deploy aktual ke Vercel/Turso menunggu eksekusi user)
+- [x] Website bisa di-deploy dan diakses publik — **live di https://dzakydev.my.id** (Vercel + Turso, lihat DEPLOY.md)
 - [x] **v2:** Pengunjung publik bisa lihat Experience & Certifications tanpa login
 - [x] **v2:** Admin bisa CRUD Experience & Certifications + upload gambar (foto profil, portofolio, sertifikat) tanpa sentuh kode — sudah diverifikasi end-to-end dengan Cloudinary asli
 - [x] **v2:** Home page scrollable dengan rotating tagline dan preview section (kode-level selesai; kehalusan animasi belum diverifikasi visual di browser)
@@ -145,4 +145,4 @@ Website pribadi berisi profil diri, daftar skill yang dikuasai, dan portofolio p
 
 ---
 
-*Terakhir diupdate: 9 Juli 2026 (v3 — Module 14-21 selesai semua: visual polish, theme toggle, stat highlight, filter portofolio, form kontak, SEO, blog. Sisa kerja: Module 7 — deploy production ke Vercel/Turso, masih sengaja ditunda menunggu user, dan verifikasi visual browser asli karena claude-in-chrome belum pernah terhubung sepanjang project)*
+*Terakhir diupdate: 16 Juli 2026 — Module 7 (deploy production) selesai: live di https://dzakydev.my.id (Vercel + Turso, langkah lengkap di DEPLOY.md). Sisa kerja: verifikasi visual browser asli karena claude-in-chrome belum pernah terhubung sepanjang project.*

@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Field, FormSection, inputClass } from "@/components/FormField";
 import { Button } from "@/components/ui/Button";
+import { ImageUpload } from "@/components/ui/ImageUpload";
 import { TIERS } from "@/lib/constants";
 
 type AchievementFormProps = {
@@ -16,6 +17,7 @@ type AchievementFormProps = {
     year: number;
     tier: string;
     certificateUrl: string | null;
+    imageUrl: string | null;
   };
 };
 
@@ -33,6 +35,7 @@ export function AchievementForm({
   const [certificateUrl, setCertificateUrl] = useState(
     initial?.certificateUrl ?? "",
   );
+  const [imageUrl, setImageUrl] = useState(initial?.imageUrl ?? "");
   const [status, setStatus] = useState<"idle" | "saving" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -48,6 +51,7 @@ export function AchievementForm({
       year: Number(year),
       tier,
       certificateUrl: certificateUrl || null,
+      imageUrl: imageUrl || null,
     };
 
     const url =
@@ -62,7 +66,7 @@ export function AchievementForm({
 
     if (!res.ok) {
       const data = await res.json().catch(() => null);
-      setErrorMessage(data?.error ?? "Gagal menyimpan achievement.");
+      setErrorMessage(data?.error ?? "Gagal menyimpan award.");
       setStatus("error");
       return;
     }
@@ -73,7 +77,13 @@ export function AchievementForm({
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-      <FormSection title="Detail Achievement">
+      <FormSection title="Detail Award">
+        <ImageUpload
+          value={imageUrl || null}
+          onChange={(url) => setImageUrl(url)}
+          label="Gambar Award (opsional)"
+        />
+
         <Field label="Judul">
           <input
             value={title}
@@ -153,7 +163,7 @@ export function AchievementForm({
         {status === "saving"
           ? "Menyimpan..."
           : mode === "create"
-            ? "Tambah Achievement"
+            ? "Tambah Award"
             : "Simpan Perubahan"}
       </Button>
     </form>

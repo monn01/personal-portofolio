@@ -6,10 +6,10 @@
 
 ## Prasyarat sebelum mulai
 - [x] Semua module di TASKPLAN.md sudah selesai dan ditest lokal
-- [ ] Kode sudah di-push ke GitHub (repo `personal-portofolio`)
+- [x] Kode sudah di-push ke GitHub (repo `monn01/personal-portofolio`, branch `main`)
 - [x] Domain `.my.id` sudah dibeli dan aktif — **dzakydev.my.id** (aktif s.d. 2027-07-15, auto-renew nyala)
-- [ ] Akun Vercel (bisa daftar pakai akun GitHub, gratis)
-- [ ] Akun Turso (turso.tech, gratis)
+- [x] Akun Vercel (project `personal-portofolio-76js`, team `jaee`)
+- [x] Akun Turso (db `personal-portofolio-monn01.aws-ap-northeast-1.turso.io`)
 
 **Catatan domain:** Nameserver saat ini masih default/parking (`hermes.dns-parking.com`, `artemis.dns-parking.com`) — belum diarahkan ke mana pun. Ini akan diubah di Tahap 8.
 
@@ -148,21 +148,21 @@ Redeploy project setelah update ini (Vercel biasanya otomatis redeploy saat env 
 
 ## Tahap 10 — Testing Akhir di Production
 
-- [ ] Buka domain custom, cek semua halaman publik tampil benar
-- [ ] Login admin berhasil dengan akun production
-- [ ] Coba edit profil, tambah portofolio — cek tersimpan dan tampil di publik
-- [ ] Upload gambar (Cloudinary) berfungsi di production
-- [ ] Cek tampilan mobile & desktop
-- [ ] Logout, coba akses `/admin/dashboard` langsung tanpa login → harus redirect ke `/login`
-- [ ] Cek traffic chart di `/admin/dashboard` mulai terisi setelah beberapa kunjungan
+- [x] Buka domain custom, cek semua halaman publik tampil benar
+- [x] Login admin berhasil dengan akun production
+- [x] Coba edit profil, tambah portofolio — cek tersimpan dan tampil di publik
+- [x] Upload gambar (Cloudinary) berfungsi di production
+- [x] Cek tampilan mobile & desktop
+- [x] Logout, coba akses `/admin/dashboard` langsung tanpa login → harus redirect ke `/login`
+- [x] Cek traffic chart di `/admin/dashboard` mulai terisi setelah beberapa kunjungan
 
 ---
 
 ## Checklist keamanan sebelum benar-benar "go live"
-- [ ] `.env` tidak pernah ter-commit ke GitHub (sudah dicek dari awal, tapi cek ulang)
-- [ ] Password admin production berbeda dari development
-- [ ] `AUTH_SECRET` production berbeda dari development
-- [ ] Tidak ada API key/secret yang ter-expose di kode frontend (cek dengan inspect element/view source)
+- [x] `.env` tidak pernah ter-commit ke GitHub (sudah dicek dari awal, tapi cek ulang)
+- [x] Password admin production berbeda dari development
+- [x] `AUTH_SECRET` production berbeda dari development
+- [x] Tidak ada API key/secret yang ter-expose di kode frontend (cek dengan inspect element/view source)
 
 ---
 

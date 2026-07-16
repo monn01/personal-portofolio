@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { CategoryTag } from "@/components/ui/CategoryTag";
-import { PortfolioIcon } from "./PortfolioIcon";
+import { PortfolioThumbnail } from "./PortfolioIcon";
 
 type PortfolioDetailProps = {
   title: string;
@@ -33,14 +33,17 @@ export function PortfolioDetail({
         ← Kembali ke Portfolio
       </Link>
 
-      <div className="mt-6 flex items-start justify-between">
-        <PortfolioIcon
+      <div className="relative mt-6 aspect-video w-full overflow-hidden rounded-2xl border border-border bg-surface-hover">
+        <PortfolioThumbnail
           category={category}
           thumbnailUrl={thumbnailUrl}
           title={title}
-          className="h-14 w-14"
+          className="h-full w-full"
+          iconClassName="h-16 w-16"
         />
-        <span className="text-sm text-subtle-foreground">{year}</span>
+        <span className="absolute top-3 right-3 rounded-full bg-black/60 px-2.5 py-1 text-xs font-bold text-white backdrop-blur-sm">
+          {year}
+        </span>
       </div>
 
       <div className="mt-6">

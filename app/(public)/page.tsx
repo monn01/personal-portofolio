@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { AchievementCard } from "@/components/AchievementCard";
-import { CertificationCard } from "@/components/CertificationCard";
+import { CertAwardPreviewCard } from "@/components/CertAwardPreviewCard";
 import { ExperienceTimeline } from "@/components/ExperienceTimeline";
 import { HeroSection } from "@/components/HeroSection";
 import { PortfolioCard } from "@/components/PortfolioCard";
@@ -153,29 +152,14 @@ export default async function HomePage() {
           <ScrollReveal className="mt-16">
             <SectionHeader title="Certification & Award" accent="accent-mint" />
             <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {certAwardPreview.map((item) =>
-                item.type === "certification" ? (
-                  <CertificationCard
-                    key={item.data.id}
-                    title={item.data.title}
-                    issuer={item.data.issuer}
-                    issueDate={item.data.issueDate}
-                    credentialUrl={item.data.credentialUrl}
-                    imageUrl={item.data.imageUrl}
-                  />
-                ) : (
-                  <AchievementCard
-                    key={item.data.id}
-                    title={item.data.title}
-                    description={item.data.description}
-                    organizer={item.data.organizer}
-                    year={item.data.year}
-                    tier={item.data.tier}
-                    certificateUrl={item.data.certificateUrl}
-                    collapsibleDescription
-                  />
-                ),
-              )}
+              {certAwardPreview.map((item) => (
+                <CertAwardPreviewCard
+                  key={item.data.id}
+                  title={item.data.title}
+                  imageUrl={item.data.imageUrl}
+                  kind={item.type}
+                />
+              ))}
             </div>
             {certAwardTotal > HOME_CERT_AWARD_LIMIT && (
               <ViewAllLink href="/certifications" />

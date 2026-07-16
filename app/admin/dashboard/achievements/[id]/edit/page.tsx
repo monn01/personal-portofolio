@@ -22,11 +22,11 @@ export default async function EditAchievementPage({
           href="/admin/dashboard/achievements"
           className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground-secondary"
         >
-          ← Kembali ke Kelola Achievements
+          ← Kembali ke Kelola Awards
         </Link>
 
         <h1 className="mt-4 text-2xl font-black text-foreground">
-          Edit Achievement
+          Edit Award
         </h1>
 
         <div className="mt-8">
@@ -40,6 +40,7 @@ export default async function EditAchievementPage({
               year: achievement.year,
               tier: achievement.tier,
               certificateUrl: achievement.certificateUrl,
+              imageUrl: achievement.imageUrl,
             }}
           />
         </div>

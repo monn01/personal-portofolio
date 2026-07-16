@@ -348,6 +348,7 @@ export type AchievementInput = {
   year: number;
   tier: string;
   certificateUrl: string | null;
+  imageUrl: string | null;
 };
 
 export function parseAchievementInput(
@@ -361,6 +362,7 @@ export function parseAchievementInput(
     tier: typeof raw.tier === "string" ? raw.tier : "",
     certificateUrl:
       typeof raw.certificateUrl === "string" ? raw.certificateUrl : null,
+    imageUrl: typeof raw.imageUrl === "string" ? raw.imageUrl : null,
   };
 }
 
@@ -387,6 +389,7 @@ function toAchievementData(input: AchievementInput) {
     year: input.year,
     tier: input.tier,
     certificateUrl: input.certificateUrl?.trim() || null,
+    imageUrl: input.imageUrl?.trim() || null,
   };
 }
 

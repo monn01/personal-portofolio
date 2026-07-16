@@ -19,7 +19,7 @@ export default async function AdminAchievementsListPage() {
 
         <div className="mt-4 flex items-center justify-between">
           <h1 className="text-2xl font-black text-foreground">
-            Kelola Achievements
+            Kelola Awards
           </h1>
           <Button
             href="/admin/dashboard/achievements/new"
@@ -27,13 +27,13 @@ export default async function AdminAchievementsListPage() {
             size="sm"
             tone="bold"
           >
-            + Tambah Achievement
+            + Tambah Award
           </Button>
         </div>
 
         {achievements.length === 0 ? (
           <p className="mt-10 text-subtle-foreground">
-            Belum ada achievement.
+            Belum ada award.
           </p>
         ) : (
           <div className="mt-8 flex flex-col gap-3">
@@ -43,10 +43,11 @@ export default async function AdminAchievementsListPage() {
                 editHref={`/admin/dashboard/achievements/${achievement.id}/edit`}
                 title={achievement.title}
                 subtitle={`${achievement.organizer} · ${achievement.year} · ${achievement.tier}`}
+                imageUrl={achievement.imageUrl}
                 icon={<TrophyIcon />}
                 deleteEndpoint={`/api/achievement/${achievement.id}`}
-                deleteConfirmMessage={`Hapus achievement "${achievement.title}"? Tindakan ini tidak bisa dibatalkan.`}
-                deleteErrorMessage="Gagal menghapus achievement."
+                deleteConfirmMessage={`Hapus award "${achievement.title}"? Tindakan ini tidak bisa dibatalkan.`}
+                deleteErrorMessage="Gagal menghapus award."
               />
             ))}
           </div>

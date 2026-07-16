@@ -42,7 +42,7 @@ export default async function AdminDashboardLayout({
     },
     {
       href: "/admin/dashboard/achievements",
-      label: "Achievements",
+      label: "Awards",
       icon: <TrophyIcon />,
     },
     {

@@ -11,57 +11,59 @@ const CATEGORY_COLOR_CLASSES: Record<string, string> = {
   design: "bg-accent-tertiary/10 text-accent-tertiary",
 };
 
+const DEFAULT_COLOR_CLASS = "bg-accent/10 text-accent";
+
 type PortfolioIconProps = {
+  category: string;
+  className?: string;
+};
+
+/** Bare category glyph (no background/sizing beyond className) — used inside PortfolioThumbnail's fallback. */
+export function PortfolioIcon({ category, className = "h-8 w-8" }: PortfolioIconProps) {
+  const path = CATEGORY_ICON_PATH[category];
+
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.5}
+      className={className}
+      aria-hidden="true"
+    >
+      <path strokeLinecap="round" strokeLinejoin="round" d={path ?? CATEGORY_ICON_PATH.web} />
+    </svg>
+  );
+}
+
+type PortfolioThumbnailProps = {
   category: string;
   thumbnailUrl?: string | null;
   title: string;
   className?: string;
+  iconClassName?: string;
 };
 
-export function PortfolioIcon({
+/** Fills its container: the real thumbnail image, or a colored category-icon fallback when none was uploaded. */
+export function PortfolioThumbnail({
   category,
   thumbnailUrl,
   title,
-  className = "h-8 w-8",
-}: PortfolioIconProps) {
+  className = "",
+  iconClassName = "h-10 w-10",
+}: PortfolioThumbnailProps) {
   if (thumbnailUrl) {
-    // eslint-disable-next-line @next/next/no-img-element
     return (
-      <img
-        src={thumbnailUrl}
-        alt={title}
-        className={`${className} rounded-xl object-cover`}
-      />
+      // eslint-disable-next-line @next/next/no-img-element
+      <img src={thumbnailUrl} alt={title} className={`object-cover ${className}`} />
     );
   }
 
-  const path = CATEGORY_ICON_PATH[category];
-  if (path) {
-    const colorClass = CATEGORY_COLOR_CLASSES[category] ?? "bg-accent/10 text-accent";
-    return (
-      <span
-        className={`${className} flex items-center justify-center rounded-xl ${colorClass}`}
-      >
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={1.5}
-          className="h-1/2 w-1/2"
-          aria-hidden="true"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" d={path} />
-        </svg>
-      </span>
-    );
-  }
+  const colorClass = CATEGORY_COLOR_CLASSES[category] ?? DEFAULT_COLOR_CLASS;
 
   return (
-    <span
-      aria-hidden="true"
-      className={`${className} flex items-center justify-center rounded-xl bg-surface-hover text-sm font-semibold text-foreground-secondary`}
-    >
-      {title.charAt(0).toUpperCase()}
-    </span>
+    <div className={`flex items-center justify-center ${colorClass} ${className}`}>
+      <PortfolioIcon category={category} className={iconClassName} />
+    </div>
   );
 }
