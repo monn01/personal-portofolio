@@ -3,19 +3,11 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import {
   deletePortfolio,
+  isNotFoundError,
   parsePortfolioInput,
   updatePortfolio,
   validatePortfolioInput,
 } from "@/lib/mutations";
-
-function isNotFoundError(error: unknown) {
-  return (
-    typeof error === "object" &&
-    error !== null &&
-    "code" in error &&
-    (error as { code?: string }).code === "P2025"
-  );
-}
 
 export async function PUT(
   request: Request,

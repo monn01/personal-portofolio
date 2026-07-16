@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { Button } from "@/components/ui/Button";
 import { loginAction } from "./actions";
 
 export default function LoginPage() {
@@ -10,16 +11,16 @@ export default function LoginPage() {
   );
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-neutral-950 px-4">
-      <div className="w-full max-w-sm rounded-xl border border-neutral-800 bg-neutral-900 p-8 shadow-xl">
-        <h1 className="text-xl font-bold text-neutral-100">Login Admin</h1>
-        <p className="mt-1 text-sm text-neutral-400">
+    <main className="flex min-h-screen items-center justify-center bg-background px-4">
+      <div className="w-full max-w-sm rounded-2xl border border-border bg-surface p-8 shadow-xl">
+        <h1 className="text-xl font-black text-foreground">Login Admin</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
           Masuk untuk mengelola konten website.
         </p>
 
         <form action={formAction} className="mt-6 flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="email" className="text-sm text-neutral-300">
+            <label htmlFor="email" className="text-sm text-foreground-secondary">
               Email
             </label>
             <input
@@ -28,12 +29,12 @@ export default function LoginPage() {
               type="email"
               required
               autoComplete="email"
-              className="rounded-md border border-neutral-700 bg-neutral-950 px-3 py-2 text-neutral-100 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="rounded-lg border border-border-strong bg-background px-3 py-2 text-foreground outline-none transition-colors hover:border-accent/40 focus:border-accent focus:ring-1 focus:ring-accent"
             />
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="password" className="text-sm text-neutral-300">
+            <label htmlFor="password" className="text-sm text-foreground-secondary">
               Password
             </label>
             <input
@@ -42,23 +43,25 @@ export default function LoginPage() {
               type="password"
               required
               autoComplete="current-password"
-              className="rounded-md border border-neutral-700 bg-neutral-950 px-3 py-2 text-neutral-100 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="rounded-lg border border-border-strong bg-background px-3 py-2 text-foreground outline-none transition-colors hover:border-accent/40 focus:border-accent focus:ring-1 focus:ring-accent"
             />
           </div>
 
           {errorMessage && (
-            <p role="alert" className="text-sm text-red-400">
+            <p role="alert" className="text-sm text-danger">
               {errorMessage}
             </p>
           )}
 
-          <button
+          <Button
             type="submit"
             disabled={isPending}
-            className="mt-2 rounded-full bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-60"
+            variant="primary"
+            tone="bold"
+            className="mt-2"
           >
             {isPending ? "Memproses..." : "Login"}
-          </button>
+          </Button>
         </form>
       </div>
     </main>

@@ -1,10 +1,11 @@
-import { getSimpleIconMarkup } from "@/lib/simple-icon";
+import { getSimpleIconHex, getSimpleIconMarkup } from "@/lib/simple-icon";
 
 type SkillIconProps = {
   name: string;
   iconSlug?: string | null;
   iconUrl?: string | null;
   className?: string;
+  useBrandColor?: boolean;
 };
 
 export function SkillIcon({
@@ -12,6 +13,7 @@ export function SkillIcon({
   iconSlug,
   iconUrl,
   className = "h-6 w-6",
+  useBrandColor = false,
 }: SkillIconProps) {
   if (iconUrl) {
     // eslint-disable-next-line @next/next/no-img-element
@@ -26,21 +28,16 @@ export function SkillIcon({
 
   const markup = iconSlug ? getSimpleIconMarkup(iconSlug) : null;
   if (markup) {
+    const hex = useBrandColor && iconSlug ? getSimpleIconHex(iconSlug) : null;
     return (
       <span
         aria-hidden="true"
-        className={`${className} inline-block text-neutral-300`}
+        className={`${className} inline-block ${hex ? "" : "text-foreground-secondary"}`}
+        style={hex ? { color: hex } : undefined}
         dangerouslySetInnerHTML={{ __html: markup }}
       />
     );
   }
 
-  return (
-    <span
-      aria-hidden="true"
-      className={`${className} inline-flex items-center justify-center rounded-full bg-neutral-800 text-xs font-semibold text-neutral-300`}
-    >
-      {name.charAt(0).toUpperCase()}
-    </span>
-  );
+  return null;
 }

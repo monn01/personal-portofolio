@@ -1,4 +1,7 @@
 import Link from "next/link";
+import { SitePillNav } from "@/components/SitePillNav";
+import { Button } from "@/components/ui/Button";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { getProfile } from "@/lib/queries";
 import { MobileNav } from "./MobileNav";
 
@@ -7,43 +10,48 @@ const NAV_LINKS = [
   { href: "/about", label: "About" },
   { href: "/skills", label: "Skills" },
   { href: "/portfolio", label: "Projects" },
+  { href: "/experience", label: "Experience" },
+  { href: "/certifications", label: "Certifications" },
+  { href: "/blog", label: "Blog" },
 ];
+
+function initials(name: string) {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "P";
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[1][0]).toUpperCase();
+}
 
 export async function SiteHeader() {
   const profile = await getProfile();
+  const name = profile?.name ?? "Portfolio";
 
   return (
-    <header className="sticky top-0 z-50 border-b border-neutral-800 bg-neutral-950/80 backdrop-blur">
-      <div className="relative mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+    <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur">
+      <div className="relative mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-4">
         <Link
           href="/"
-          className="text-lg font-bold tracking-tight text-neutral-100"
+          className="shrink-0 text-lg font-black tracking-tighter text-foreground transition-transform hover:scale-105"
         >
-          {profile?.name ?? "Portfolio"}
+          {initials(name)}
+          <span className="text-accent-pink">.</span>
         </Link>
 
-        <nav className="hidden items-center gap-6 md:flex">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="text-sm font-medium text-neutral-400 transition-colors hover:text-neutral-100"
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
+        <div className="hidden lg:block">
+          <SitePillNav />
+        </div>
 
-        {profile?.email && (
-          <a
-            href={`mailto:${profile.email}`}
-            className="hidden rounded-full bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-500 md:inline-block"
-          >
+        <div className="hidden items-center gap-3 lg:flex">
+          <ThemeToggle />
+          <Button href="/contact" variant="primary" tone="bold">
             Contact
-          </a>
-        )}
+          </Button>
+        </div>
 
-        <MobileNav links={NAV_LINKS} email={profile?.email} />
+        <div className="flex items-center gap-2 lg:hidden">
+          <ThemeToggle />
+          <MobileNav links={NAV_LINKS} />
+        </div>
       </div>
     </header>
   );

@@ -1,12 +1,37 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { PortfolioDetail } from "@/components/PortfolioDetail";
-import { getPortfolioById } from "@/lib/queries";
+import { buildPageMetadata } from "@/lib/seo";
+import { getPortfolioById, getProfile } from "@/lib/queries";
+
+type PortfolioDetailPageProps = {
+  params: Promise<{ id: string }>;
+};
+
+export async function generateMetadata({
+  params,
+}: PortfolioDetailPageProps): Promise<Metadata> {
+  const { id } = await params;
+  const [portfolio, profile] = await Promise.all([
+    getPortfolioById(id),
+    getProfile(),
+  ]);
+
+  if (!portfolio) {
+    return { title: "Portfolio" };
+  }
+
+  return buildPageMetadata({
+    title: portfolio.title,
+    siteName: profile?.name ?? "Personal Portfolio",
+    description: portfolio.description,
+    image: portfolio.thumbnailUrl ?? undefined,
+  });
+}
 
 export default async function PortfolioDetailPage({
   params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+}: PortfolioDetailPageProps) {
   const { id } = await params;
   const portfolio = await getPortfolioById(id);
 
@@ -15,7 +40,7 @@ export default async function PortfolioDetailPage({
   }
 
   return (
-    <main className="flex-1 bg-neutral-950">
+    <main className="flex-1">
       <PortfolioDetail
         title={portfolio.title}
         description={portfolio.description}

@@ -21,15 +21,23 @@ model AdminUser {
 }
 
 model Profile {
-  id           String   @id @default(cuid())
-  name         String
-  bio          String
-  photoUrl     String?
-  email        String
-  contactLinks Json? // e.g. [{ "label": "GitHub", "url": "https://github.com/..." }]
-  skills       Skill[]
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id             String          @id @default(cuid())
+  name           String
+  bio            String
+  photoUrl       String?
+  email          String
+  contactLinks   Json? // e.g. [{ "label": "GitHub", "url": "https://github.com/..." }]
+  taglines       Json? // string[], mis. ["Mahasiswa Informatika UAD", "Full-Stack Developer"]
+  galleryPhotos  Json? // string[] URL foto galeri, ditampilkan di halaman About
+  cvUrl          String? // link file CV/resume (PDF)
+  heroPhotoUrl   String? // foto khusus hero Home, beda dari photoUrl (dipakai About/navbar)
+  heroBio        String? // kalimat pendek khusus hero Home, beda dari bio (dipakai About)
+  skills         Skill[]
+  experiences    Experience[]
+  certifications Certification[]
+  achievements   Achievement[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
 }
 
 model Skill {
@@ -40,6 +48,48 @@ model Skill {
   category  String?
   profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
   profileId String
+}
+
+model Experience {
+  id           String    @id @default(cuid())
+  title        String
+  organization String
+  startDate    DateTime
+  endDate      DateTime?
+  description  String
+  imageUrl     String?
+  profile      Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId    String
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model Certification {
+  id            String   @id @default(cuid())
+  title         String
+  issuer        String
+  issueDate     DateTime
+  credentialUrl String?
+  imageUrl      String
+  tier          String   @default("local") // "local" | "international"
+  profile       Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId     String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Achievement {
+  id             String   @id @default(cuid())
+  title          String
+  description    String?
+  organizer      String
+  year           Int
+  tier           String // "local" | "international"
+  certificateUrl String?
+  profile        Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId      String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
 
 model Portfolio {
@@ -54,4 +104,34 @@ model Portfolio {
   externalUrl  String?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Post {
+  id            String    @id @default(cuid())
+  title         String
+  slug          String    @unique
+  excerpt       String
+  content       String // markdown
+  coverImageUrl String?
+  published     Boolean   @default(false)
+  publishedAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model PageView {
+  id        String   @id @default(cuid())
+  path      String
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
 }

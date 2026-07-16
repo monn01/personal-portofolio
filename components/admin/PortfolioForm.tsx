@@ -2,6 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Field, FormSection, inputClass } from "@/components/FormField";
+import { Button } from "@/components/ui/Button";
+import { ImageUpload } from "@/components/ui/ImageUpload";
+import { PORTFOLIO_CATEGORIES } from "@/lib/constants";
 
 type PortfolioFormProps = {
   mode: "create" | "edit";
@@ -18,31 +22,11 @@ type PortfolioFormProps = {
   };
 };
 
-const CATEGORIES = ["web", "app", "design"];
-
-const inputClass =
-  "w-full rounded-md border border-neutral-700 bg-neutral-950 px-3 py-2 text-sm text-neutral-100 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500";
-
-function Field({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <label className="flex flex-col gap-1.5">
-      <span className="text-sm text-neutral-300">{label}</span>
-      {children}
-    </label>
-  );
-}
-
 export function PortfolioForm({ mode, portfolioId, initial }: PortfolioFormProps) {
   const router = useRouter();
   const [title, setTitle] = useState(initial?.title ?? "");
   const [description, setDescription] = useState(initial?.description ?? "");
-  const [category, setCategory] = useState(initial?.category ?? CATEGORIES[0]);
+  const [category, setCategory] = useState(initial?.category ?? PORTFOLIO_CATEGORIES[0]);
   const [thumbnailUrl, setThumbnailUrl] = useState(initial?.thumbnailUrl ?? "");
   const [year, setYear] = useState(initial?.year ?? new Date().getFullYear());
   const [role, setRole] = useState(initial?.role ?? "");
@@ -94,104 +78,105 @@ export function PortfolioForm({ mode, portfolioId, initial }: PortfolioFormProps
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      <Field label="Judul">
-        <input
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-          className={inputClass}
+    <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+      <FormSection title="Detail Portofolio">
+        <ImageUpload
+          value={thumbnailUrl || null}
+          onChange={(url) => setThumbnailUrl(url)}
+          label="Thumbnail (opsional)"
         />
-      </Field>
 
-      <Field label="Deskripsi">
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          required
-          rows={4}
-          className={inputClass}
-        />
-      </Field>
-
-      <Field label="Kategori">
-        <select
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className={inputClass}
-        >
-          {CATEGORIES.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
-        </select>
-      </Field>
-
-      <Field label="Thumbnail (URL)">
-        <input
-          value={thumbnailUrl}
-          onChange={(e) => setThumbnailUrl(e.target.value)}
-          placeholder="https://..."
-          className={inputClass}
-        />
-      </Field>
-
-      <div className="grid grid-cols-2 gap-4">
-        <Field label="Tahun">
+        <Field label="Judul">
           <input
-            type="number"
-            value={year}
-            onChange={(e) => setYear(Number(e.target.value))}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
             required
             className={inputClass}
           />
         </Field>
-        <Field label="Peran">
-          <input
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
+
+        <Field label="Deskripsi">
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             required
+            rows={4}
             className={inputClass}
           />
         </Field>
-      </div>
 
-      <Field label="Tech Stack (pisahkan dengan koma)">
-        <input
-          value={techStack}
-          onChange={(e) => setTechStack(e.target.value)}
-          placeholder="Next.js, TypeScript, Tailwind"
-          className={inputClass}
-        />
-      </Field>
+        <Field label="Kategori">
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className={inputClass}
+          >
+            {PORTFOLIO_CATEGORIES.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </select>
+        </Field>
 
-      <Field label="Link Eksternal (repo/demo)">
-        <input
-          value={externalUrl}
-          onChange={(e) => setExternalUrl(e.target.value)}
-          placeholder="https://..."
-          className={inputClass}
-        />
-      </Field>
+        <div className="grid grid-cols-2 gap-4">
+          <Field label="Tahun">
+            <input
+              type="number"
+              value={year}
+              onChange={(e) => setYear(Number(e.target.value))}
+              required
+              className={inputClass}
+            />
+          </Field>
+          <Field label="Peran">
+            <input
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              required
+              className={inputClass}
+            />
+          </Field>
+        </div>
+
+        <Field label="Tech Stack (pisahkan dengan koma)">
+          <input
+            value={techStack}
+            onChange={(e) => setTechStack(e.target.value)}
+            placeholder="Next.js, TypeScript, Tailwind"
+            className={inputClass}
+          />
+        </Field>
+
+        <Field label="Link Eksternal (repo/demo)">
+          <input
+            value={externalUrl}
+            onChange={(e) => setExternalUrl(e.target.value)}
+            placeholder="https://..."
+            className={inputClass}
+          />
+        </Field>
+      </FormSection>
 
       {errorMessage && (
-        <p role="alert" className="text-sm text-red-400">
+        <p role="alert" className="text-sm text-danger">
           {errorMessage}
         </p>
       )}
 
-      <button
+      <Button
         type="submit"
         disabled={status === "saving"}
-        className="self-start rounded-full bg-blue-600 px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-60"
+        variant="primary"
+        tone="bold"
+        className="self-start"
       >
         {status === "saving"
           ? "Menyimpan..."
           : mode === "create"
             ? "Tambah Portofolio"
             : "Simpan Perubahan"}
-      </button>
+      </Button>
     </form>
   );
 }

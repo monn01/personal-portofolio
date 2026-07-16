@@ -47,3 +47,7 @@ next-env.d.ts
 /prisma/*.db
 /prisma/*.db-journal
 /dev.db
+
+# design reference screenshots (local only, not project assets)
+/gambar-referensi
+dev-server.log

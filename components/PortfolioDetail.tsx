@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { Button } from "@/components/ui/Button";
+import { CategoryTag } from "@/components/ui/CategoryTag";
 import { PortfolioIcon } from "./PortfolioIcon";
 
 type PortfolioDetailProps = {
@@ -26,7 +28,7 @@ export function PortfolioDetail({
     <article className="mx-auto max-w-2xl px-6 py-16">
       <Link
         href="/portfolio"
-        className="text-sm font-medium text-neutral-400 transition-colors hover:text-neutral-200"
+        className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground-secondary"
       >
         ← Kembali ke Portfolio
       </Link>
@@ -38,13 +40,21 @@ export function PortfolioDetail({
           title={title}
           className="h-14 w-14"
         />
-        <span className="text-sm text-neutral-500">{year}</span>
+        <span className="text-sm text-subtle-foreground">{year}</span>
       </div>
 
-      <h1 className="mt-6 text-3xl font-bold text-neutral-100">{title}</h1>
-      <p className="mt-1 text-sm font-medium text-blue-500">Peran: {role}</p>
+      <div className="mt-6">
+        <CategoryTag category={category} />
+      </div>
 
-      <p className="mt-6 leading-relaxed whitespace-pre-line text-neutral-300">
+      <h1 className="mt-3 text-3xl font-black tracking-tight text-foreground">
+        {title}
+      </h1>
+      <p className="mt-1 text-sm font-bold tracking-wide text-accent uppercase">
+        Peran: {role}
+      </p>
+
+      <p className="mt-6 leading-relaxed whitespace-pre-line text-foreground-secondary">
         {description}
       </p>
 
@@ -53,7 +63,7 @@ export function PortfolioDetail({
           {techStack.map((tech) => (
             <span
               key={tech}
-              className="rounded-full bg-neutral-800 px-3 py-1 text-xs font-medium text-neutral-300"
+              className="rounded-full bg-surface-hover px-3 py-1 text-xs font-bold text-foreground-secondary"
             >
               {tech}
             </span>
@@ -62,14 +72,9 @@ export function PortfolioDetail({
       )}
 
       {externalUrl && (
-        <a
-          href={externalUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-8 inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-blue-500"
-        >
+        <Button href={externalUrl} variant="primary" tone="bold" className="mt-8">
           Kunjungi Repo / Demo ↗
-        </a>
+        </Button>
       )}
     </article>
   );

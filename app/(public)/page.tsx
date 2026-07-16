@@ -1,44 +1,223 @@
-import Link from "next/link";
-import { getProfile } from "@/lib/queries";
+import type { Metadata } from "next";
+import { AchievementCard } from "@/components/AchievementCard";
+import { CertificationCard } from "@/components/CertificationCard";
+import { ExperienceTimeline } from "@/components/ExperienceTimeline";
+import { HeroSection } from "@/components/HeroSection";
+import { PortfolioCard } from "@/components/PortfolioCard";
+import { SkillIcon } from "@/components/SkillIcon";
+import { SkillsPreview } from "@/components/SkillsPreview";
+import { StatsSection } from "@/components/StatsSection";
+import { Button } from "@/components/ui/Button";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import {
+  getAchievements,
+  getCertifications,
+  getExperiences,
+  getPortfolios,
+  getProfile,
+} from "@/lib/queries";
+import { truncate } from "@/lib/format";
 
-export default async function HomePage() {
+const HOME_CERT_AWARD_LIMIT = 6;
+
+export async function generateMetadata(): Promise<Metadata> {
   const profile = await getProfile();
+  const description =
+    profile?.bio ?? "Profil, skill, dan portofolio pribadi.";
+
+  return { description };
+}
+
+type SectionAccent =
+  | "accent"
+  | "accent-secondary"
+  | "accent-tertiary"
+  | "accent-pink"
+  | "accent-mint";
+
+const ACCENT_TEXT: Record<SectionAccent, string> = {
+  accent: "text-accent",
+  "accent-secondary": "text-accent-secondary",
+  "accent-tertiary": "text-accent-tertiary",
+  "accent-pink": "text-accent-pink",
+  "accent-mint": "text-accent-mint",
+};
+
+function SectionHeader({
+  title,
+  accent = "accent",
+}: {
+  title: string;
+  accent?: SectionAccent;
+}) {
+  const words = title.trim().split(" ");
+  const highlight = words.pop() ?? "";
+  const prefix = words.join(" ");
 
   return (
-    <main className="flex flex-1 items-center bg-neutral-950">
-      <section className="mx-auto w-full max-w-3xl px-6 py-24">
-        {profile?.photoUrl && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={profile.photoUrl}
-            alt={profile.name}
-            className="mb-6 h-16 w-16 rounded-full object-cover"
+    <div className="text-center">
+      <h2 className="text-4xl font-black tracking-tight text-foreground sm:text-5xl">
+        {prefix && `${prefix} `}
+        <span className={ACCENT_TEXT[accent]}>{highlight}</span>
+      </h2>
+    </div>
+  );
+}
+
+function ViewAllLink({ href }: { href: string }) {
+  return (
+    <div className="mt-6 flex justify-end">
+      <Button href={href} variant="ghost" size="sm" tone="bold">
+        Lihat semua →
+      </Button>
+    </div>
+  );
+}
+
+export default async function HomePage() {
+  const [profile, achievements, experiences, certifications, portfolios] =
+    await Promise.all([
+      getProfile(),
+      getAchievements(),
+      getExperiences(),
+      getCertifications(),
+      getPortfolios(),
+    ]);
+
+  const heroSkills = (profile?.skills ?? [])
+    .filter((skill) => skill.iconSlug || skill.iconUrl)
+    .map((skill) => ({
+      name: skill.name,
+      icon: (
+        <SkillIcon
+          name={skill.name}
+          iconSlug={skill.iconSlug}
+          iconUrl={skill.iconUrl}
+          className="h-8 w-8"
+          useBrandColor
+        />
+      ),
+    }));
+
+  const certAwardItems = [
+    ...certifications.map((certification) => ({
+      type: "certification" as const,
+      date: certification.issueDate,
+      data: certification,
+    })),
+    ...achievements.map((achievement) => ({
+      type: "achievement" as const,
+      date: new Date(achievement.year, 0, 1),
+      data: achievement,
+    })),
+  ].sort((a, b) => b.date.getTime() - a.date.getTime());
+  const certAwardTotal = certAwardItems.length;
+  const certAwardPreview = certAwardItems.slice(0, HOME_CERT_AWARD_LIMIT);
+
+  return (
+    <main className="relative flex-1 overflow-hidden">
+      <section className="relative mx-auto w-full max-w-5xl px-6 pt-12 pb-24 sm:pt-16 sm:pb-28">
+        {/*
+          Pinned back to the pre-redesign font: the rest of the site moved to
+          Plus Jakarta Sans, but Hero is intentionally kept as our own visual
+          identity and untouched — see HeroSection.tsx, which is never edited.
+        */}
+        <div className="font-[family-name:var(--font-geist-sans)]">
+          <HeroSection
+            name={profile?.name ?? "Pemilik Portfolio"}
+            shortBio={
+              profile?.heroBio || truncate(profile?.bio ?? "Profil belum diisi.", 110)
+            }
+            photoUrl={profile?.heroPhotoUrl || profile?.photoUrl || null}
+            taglines={profile?.taglines ?? []}
+            skills={heroSkills}
           />
-        )}
-
-        <p className="text-sm font-medium text-blue-500">Halo, saya</p>
-        <h1 className="mt-2 text-4xl font-bold tracking-tight text-neutral-100 sm:text-5xl">
-          {profile?.name ?? "Pemilik Portfolio"}
-        </h1>
-        <p className="mt-4 max-w-xl text-neutral-400">
-          {profile?.bio ?? "Profil belum diisi."}
-        </p>
-
-        <div className="mt-8 flex flex-wrap gap-4">
-          <Link
-            href="/portfolio"
-            className="rounded-full bg-blue-600 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-blue-500"
-          >
-            Lihat Projects
-          </Link>
-          <Link
-            href="/about"
-            className="rounded-full border border-neutral-700 px-5 py-2.5 text-sm font-medium text-neutral-200 transition-colors hover:border-neutral-500"
-          >
-            Tentang Saya
-          </Link>
         </div>
       </section>
+
+      <div className="mx-auto w-full max-w-5xl px-6 pb-24">
+        <StatsSection />
+
+        {profile && profile.skills.length > 0 && (
+          <ScrollReveal className="mt-16">
+            <SectionHeader title="Work Skill" accent="accent-pink" />
+            <div className="mt-8">
+              <SkillsPreview />
+            </div>
+          </ScrollReveal>
+        )}
+
+        {certAwardPreview.length > 0 && (
+          <ScrollReveal className="mt-16">
+            <SectionHeader title="Certification & Award" accent="accent-mint" />
+            <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {certAwardPreview.map((item) =>
+                item.type === "certification" ? (
+                  <CertificationCard
+                    key={item.data.id}
+                    title={item.data.title}
+                    issuer={item.data.issuer}
+                    issueDate={item.data.issueDate}
+                    credentialUrl={item.data.credentialUrl}
+                    imageUrl={item.data.imageUrl}
+                  />
+                ) : (
+                  <AchievementCard
+                    key={item.data.id}
+                    title={item.data.title}
+                    description={item.data.description}
+                    organizer={item.data.organizer}
+                    year={item.data.year}
+                    tier={item.data.tier}
+                    certificateUrl={item.data.certificateUrl}
+                    collapsibleDescription
+                  />
+                ),
+              )}
+            </div>
+            {certAwardTotal > HOME_CERT_AWARD_LIMIT && (
+              <ViewAllLink href="/certifications" />
+            )}
+          </ScrollReveal>
+        )}
+
+        {experiences.length > 0 && (
+          <ScrollReveal className="mt-16">
+            <SectionHeader title="Work Experience" accent="accent-secondary" />
+            <div className="mx-auto mt-6 max-w-3xl">
+              <ExperienceTimeline
+                experiences={experiences.slice(0, 3)}
+                collapsibleDescription
+              />
+            </div>
+            <ViewAllLink href="/experience" />
+          </ScrollReveal>
+        )}
+
+        {portfolios.length > 0 && (
+          <ScrollReveal className="mt-16">
+            <SectionHeader title="Featured Works" accent="accent-tertiary" />
+            <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {portfolios.slice(0, 3).map((portfolio) => (
+                <PortfolioCard
+                  key={portfolio.id}
+                  id={portfolio.id}
+                  title={portfolio.title}
+                  description={portfolio.description}
+                  category={portfolio.category}
+                  thumbnailUrl={portfolio.thumbnailUrl}
+                  year={portfolio.year}
+                  role={portfolio.role}
+                  techStack={portfolio.techStack}
+                  externalUrl={portfolio.externalUrl}
+                  collapsibleDescription
+                />
+              ))}
+            </div>
+            <ViewAllLink href="/portfolio" />
+          </ScrollReveal>
+        )}
+      </div>
     </main>
   );
 }

@@ -16,16 +16,16 @@ export default async function EditPortfolioPage({
   }
 
   return (
-    <main className="min-h-screen bg-neutral-950 px-6 py-10">
+    <main className="flex-1 bg-background px-6 py-10">
       <div className="mx-auto max-w-2xl">
         <Link
           href="/admin/dashboard/portfolio"
-          className="text-sm font-medium text-neutral-400 transition-colors hover:text-neutral-200"
+          className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground-secondary"
         >
           ← Kembali ke Kelola Portofolio
         </Link>
 
-        <h1 className="mt-4 text-2xl font-bold text-neutral-100">
+        <h1 className="mt-4 text-2xl font-black text-foreground">
           Edit Portofolio
         </h1>
 

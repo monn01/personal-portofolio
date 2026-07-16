@@ -5,6 +5,12 @@ const CATEGORY_ICON_PATH: Record<string, string> = {
     "M12 21a9 9 0 110-18 6 6 0 016 6c0 1.657-1.343 3-3 3h-1.5a1.5 1.5 0 000 3H15a1.5 1.5 0 010 3h-3zM7.5 12a1 1 0 100-2 1 1 0 000 2zM9.5 8a1 1 0 100-2 1 1 0 000 2zM14 8a1 1 0 100-2 1 1 0 000 2z",
 };
 
+const CATEGORY_COLOR_CLASSES: Record<string, string> = {
+  web: "bg-accent/10 text-accent",
+  app: "bg-accent-secondary/10 text-accent-secondary",
+  design: "bg-accent-tertiary/10 text-accent-tertiary",
+};
+
 type PortfolioIconProps = {
   category: string;
   thumbnailUrl?: string | null;
@@ -24,16 +30,17 @@ export function PortfolioIcon({
       <img
         src={thumbnailUrl}
         alt={title}
-        className={`${className} rounded-md object-cover`}
+        className={`${className} rounded-xl object-cover`}
       />
     );
   }
 
   const path = CATEGORY_ICON_PATH[category];
   if (path) {
+    const colorClass = CATEGORY_COLOR_CLASSES[category] ?? "bg-accent/10 text-accent";
     return (
       <span
-        className={`${className} flex items-center justify-center rounded-md bg-blue-500/10 text-blue-400`}
+        className={`${className} flex items-center justify-center rounded-xl ${colorClass}`}
       >
         <svg
           viewBox="0 0 24 24"
@@ -52,7 +59,7 @@ export function PortfolioIcon({
   return (
     <span
       aria-hidden="true"
-      className={`${className} flex items-center justify-center rounded-md bg-neutral-800 text-sm font-semibold text-neutral-300`}
+      className={`${className} flex items-center justify-center rounded-xl bg-surface-hover text-sm font-semibold text-foreground-secondary`}
     >
       {title.charAt(0).toUpperCase()}
     </span>

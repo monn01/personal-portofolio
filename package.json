@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "set-admin": "tsx prisma/set-admin.ts"
   },
   "dependencies": {
     "@libsql/client": "^0.17.4",
@@ -15,14 +16,19 @@
     "@prisma/adapter-libsql": "^7.8.0",
     "@prisma/client": "^7.8.0",
     "bcryptjs": "^3.0.3",
+    "cloudinary": "^2.10.0",
+    "framer-motion": "^12.42.2",
     "next": "16.2.10",
     "next-auth": "^5.0.0-beta.31",
+    "next-themes": "^0.4.6",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "react-markdown": "^10.1.0",
     "simple-icons": "^16.25.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@tailwindcss/typography": "^0.5.20",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",
     "@types/react": "^19",

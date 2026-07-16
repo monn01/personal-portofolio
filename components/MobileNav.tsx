@@ -1,27 +1,31 @@
 "use client";
 
+import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { Button } from "@/components/ui/Button";
 
 type NavLink = { href: string; label: string };
 
-export function MobileNav({
-  links,
-  email,
-}: {
-  links: NavLink[];
-  email?: string | null;
-}) {
+function isActive(pathname: string, href: string) {
+  if (href === "/") return pathname === "/";
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+
+export function MobileNav({ links }: { links: NavLink[] }) {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
-    <div className="md:hidden">
-      <button
+    <div className="lg:hidden">
+      <motion.button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
+        whileTap={{ scale: 0.9 }}
         aria-expanded={isOpen}
         aria-label="Toggle menu"
-        className="flex h-9 w-9 items-center justify-center rounded-md border border-neutral-800 text-neutral-300"
+        className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-foreground-secondary"
       >
         <span className="sr-only">Toggle menu</span>
         {isOpen ? (
@@ -33,31 +37,47 @@ export function MobileNav({
             <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         )}
-      </button>
+      </motion.button>
 
-      {isOpen && (
-        <nav className="absolute inset-x-0 top-full flex flex-col gap-1 border-b border-neutral-800 bg-neutral-950 px-6 py-4">
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.nav
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.15 }}
+            className="absolute inset-x-4 top-full mt-2 flex flex-col gap-1 rounded-2xl border border-border bg-surface p-3 shadow-xl"
+          >
+            {links.map((link) => {
+              const active = isActive(pathname, link.href);
+              return (
+                <motion.div key={link.href} whileTap={{ scale: 0.96 }}>
+                  <Link
+                    href={link.href}
+                    onClick={() => setIsOpen(false)}
+                    className={`block rounded-xl px-3 py-2.5 text-sm font-bold transition-colors ${
+                      active
+                        ? "bg-accent text-white"
+                        : "text-foreground-secondary hover:bg-surface-hover hover:text-foreground"
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                </motion.div>
+              );
+            })}
+            <Button
+              href="/contact"
               onClick={() => setIsOpen(false)}
-              className="rounded-md px-2 py-2 text-sm font-medium text-neutral-300 transition-colors hover:bg-neutral-900 hover:text-neutral-100"
-            >
-              {link.label}
-            </Link>
-          ))}
-          {email && (
-            <a
-              href={`mailto:${email}`}
-              onClick={() => setIsOpen(false)}
-              className="mt-1 rounded-full bg-blue-600 px-2 py-2 text-center text-sm font-medium text-white transition-colors hover:bg-blue-500"
+              variant="primary"
+              tone="bold"
+              className="mt-1"
             >
               Contact
-            </a>
-          )}
-        </nav>
-      )}
+            </Button>
+          </motion.nav>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

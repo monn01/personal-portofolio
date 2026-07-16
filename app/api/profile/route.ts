@@ -30,6 +30,15 @@ export async function PUT(request: Request) {
     contactLinks: Array.isArray(raw.contactLinks)
       ? (raw.contactLinks as UpdateProfileInput["contactLinks"])
       : [],
+    taglines: Array.isArray(raw.taglines)
+      ? raw.taglines.filter((t): t is string => typeof t === "string")
+      : [],
+    galleryPhotos: Array.isArray(raw.galleryPhotos)
+      ? raw.galleryPhotos.filter((t): t is string => typeof t === "string")
+      : [],
+    cvUrl: typeof raw.cvUrl === "string" ? raw.cvUrl : null,
+    heroPhotoUrl: typeof raw.heroPhotoUrl === "string" ? raw.heroPhotoUrl : null,
+    heroBio: typeof raw.heroBio === "string" ? raw.heroBio : null,
     skills: Array.isArray(raw.skills)
       ? (raw.skills as UpdateProfileInput["skills"])
       : [],

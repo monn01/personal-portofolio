@@ -12,9 +12,15 @@ async function main() {
     },
   });
 
+  const taglines = [
+    "Mahasiswa Informatika UAD",
+    "Full-Stack Developer",
+    "UI/UX Enthusiast",
+  ];
+
   const profile = await prisma.profile.upsert({
     where: { id: "dummy-profile-1" },
-    update: {},
+    update: { taglines },
     create: {
       id: "dummy-profile-1",
       name: "Zaky Prayata",
@@ -25,6 +31,7 @@ async function main() {
         { label: "GitHub", url: "https://github.com/zakyprayata" },
         { label: "LinkedIn", url: "https://linkedin.com/in/zakyprayata" },
       ],
+      taglines,
     },
   });
 
@@ -91,6 +98,73 @@ async function main() {
     });
     if (!existing) {
       await prisma.portfolio.create({ data: portfolio });
+    }
+  }
+
+  const experiences = [
+    {
+      title: "Freelance Web Developer",
+      organization: "Mandiri",
+      startDate: new Date("2023-01-01"),
+      endDate: null,
+      description:
+        "Mengerjakan project website untuk UMKM dan personal branding klien, dari desain sampai deploy.",
+      profileId: profile.id,
+    },
+    {
+      title: "Ketua Divisi Pengembangan",
+      organization: "Himpunan Mahasiswa Informatika UAD",
+      startDate: new Date("2024-09-01"),
+      endDate: new Date("2025-08-01"),
+      description:
+        "Memimpin tim pengembangan website organisasi dan sistem informasi kegiatan mahasiswa.",
+      profileId: profile.id,
+    },
+    {
+      title: "Software Engineer Intern",
+      organization: "PT Teknologi Nusantara",
+      startDate: new Date("2025-06-01"),
+      endDate: new Date("2025-09-01"),
+      description:
+        "Membangun fitur dashboard internal pakai Next.js dan Prisma, kolaborasi dengan tim produk untuk requirement gathering.",
+      profileId: profile.id,
+    },
+  ];
+
+  for (const experience of experiences) {
+    const existing = await prisma.experience.findFirst({
+      where: { title: experience.title, organization: experience.organization },
+    });
+    if (!existing) {
+      await prisma.experience.create({ data: experience });
+    }
+  }
+
+  const certifications = [
+    {
+      title: "Belajar Dasar Pemrograman Web",
+      issuer: "Dicoding Indonesia",
+      issueDate: new Date("2024-03-15"),
+      credentialUrl: "https://www.dicoding.com/certificates/example1",
+      imageUrl: "/certificates/dicoding-dasar-web.png",
+      profileId: profile.id,
+    },
+    {
+      title: "Next.js Fundamentals",
+      issuer: "Vercel",
+      issueDate: new Date("2025-01-20"),
+      credentialUrl: null,
+      imageUrl: "/certificates/nextjs-fundamentals.png",
+      profileId: profile.id,
+    },
+  ];
+
+  for (const certification of certifications) {
+    const existing = await prisma.certification.findFirst({
+      where: { title: certification.title, issuer: certification.issuer },
+    });
+    if (!existing) {
+      await prisma.certification.create({ data: certification });
     }
   }
 
